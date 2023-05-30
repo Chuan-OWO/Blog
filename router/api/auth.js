@@ -34,6 +34,16 @@ router.post('/register', async (req, res) => {
         }
 
         //驗證 password 格式
+        function validatePassword(password) {
+            // 密碼至少包含一個大寫字母、一個小寫字母、一個數字，且長度在8到16之間
+            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+            return passwordRegex.test(password);
+        }
+        if (validatePassword(password)) {
+            console.log("密碼格是正確");
+          } else {
+            return res.status(400).json({ error: '密碼至少包含一個大寫字母、一個小寫字母、一個數字，且長度在8到16之間' });
+          }
 
         // 檢查用戶是否存在
         const existingUser = await User.findOne({ email });

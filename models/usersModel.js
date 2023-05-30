@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+
+const bcrypt = require('bcrypt');
+
 
 const Schema = mongoose.Schema
 
@@ -27,5 +29,26 @@ const userSchema = new Schema({
         default: Date.now,
       },
 })
+
+//用 bcrypt 對 password 加密
+userSchema.pre('save', async function(next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+userSchema.methods.comparePassword = async function(password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 
 module.exports = mongoose.model('User', userSchema);

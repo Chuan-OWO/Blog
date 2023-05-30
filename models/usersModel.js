@@ -12,19 +12,18 @@ const userSchema = new Schema({
         trim: true, //  去除掉不必要的空白
         unique: true, //  確認這個 email 是唯一
       },
-      username: {
+    username: {
         type: String,
         required: true,
         trim: true,
         unique: true,
       },
-      password: {
+    password: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
       },
-      createdAt: {
+    createdAt: {
         type: Date,
         default: Date.now,
       },
@@ -42,6 +41,8 @@ userSchema.pre('save', async function(next) {
   }
 });
 
+
+//驗證用戶密碼
 userSchema.methods.comparePassword = async function(password) {
   try {
     return await bcrypt.compare(password, this.password);
@@ -51,4 +52,4 @@ userSchema.methods.comparePassword = async function(password) {
 };
 
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('user', userSchema);

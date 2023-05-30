@@ -17,7 +17,17 @@ router.post('/register', async (req, res) => {
             { error: `email:${email}不能為空、username:${username}不能為空、password:${password}不能為空 ` });
         }
 
-       
+        function validateEmail(email) {
+            // 使用正規表達是驗證格式
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        if (validateEmail(email)) {
+            console.log(`email:${email}格式正確`);
+        } else {
+            return res.status(400).json({ error: 'email 格式錯誤' });
+            // console.log("email格式錯誤");
+        }
 
         // 檢查用戶是否存在
         const existingUser = await User.findOne({ email });
@@ -31,7 +41,7 @@ router.post('/register', async (req, res) => {
         await newUser.save();
 
         res.status(200).json({ message: '註冊成功' });
-        
+
 
     } catch (error) {
       res.status(500).json({ error: '註冊失敗' });

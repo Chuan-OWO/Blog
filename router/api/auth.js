@@ -4,6 +4,7 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const User = require('../../models/usersModel')
 
+//bug user schema大小寫
 
 //註冊 修改 驗證 登入 登出
 
@@ -16,9 +17,10 @@ router.post('/register', async (req, res) => {
         
         if(!email || !username || !password){
             return res.status(400).json(
-            { error: `email:${email}不能為空、username:${username}不能為空、password:${password}不能為空 ` });
+            { error: `email不能為空、username不能為空、password不能為空 ` });
         }
 
+        //驗證 email 格式
         function validateEmail(email) {
             // 使用正規表達是驗證格式
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,6 +32,8 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'email 格式錯誤' });
             // console.log("email格式錯誤");
         }
+
+        //驗證 password 格式
 
         // 檢查用戶是否存在
         const existingUser = await User.findOne({ email });

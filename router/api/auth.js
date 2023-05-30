@@ -31,6 +31,7 @@ router.post('/register', async (req, res) => {
         await newUser.save();
 
         res.status(200).json({ message: '註冊成功' });
+        
 
     } catch (error) {
       res.status(500).json({ error: '註冊失敗' });

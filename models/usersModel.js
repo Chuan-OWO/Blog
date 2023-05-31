@@ -63,7 +63,21 @@ userSchema.methods.comparePassword = async function(password) {
   }
 };
 
-
+// 建立 userSchema 實例(Document)能使用的方法：產生 JWT
+userSchema.methods.generateAuthToken = async function() {
+  try {
+    // this 指向當前的使用者實例
+    const user = this;
+    // 產生一組 JWT
+    const token = await jwt.sign({ _id: user._id }, process.env.JWTSECRET);
+     // 回傳 JWT
+    return token;
+  } catch (error) {
+    // 處理錯誤
+    console.error('生成令牌时出错：', error);
+    throw error;
+  }
+};
 
 
 

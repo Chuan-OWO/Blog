@@ -69,7 +69,13 @@ userSchema.methods.generateAuthToken = async function() {
     // this 指向當前的使用者實例
     const user = this;
     // 產生一組 JWT
-    const token = await jwt.sign({ _id: user._id }, process.env.JWTSECRET);
+    const token = await jwt.sign(
+      { _id: user._id }, 
+      process.env.JWTSECRET,
+      {
+        expiresIn: 60 * 60 * 24 //一天
+      }
+    )
      // 回傳 JWT
     return token;
   } catch (error) {

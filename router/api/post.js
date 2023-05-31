@@ -33,8 +33,9 @@ router.delete('/delete/:id')
 //搜尋單個文章
 router.get('/post/:id', async (req,res)=>{
     try {
-        const post = await Post.findById(req.params.id).populate('user');
-
+        const post = await Post.findById(req.params.id)
+        .populate('user', 'username')
+        console.log('post:>> ', post)
         if (!post) {
           return res.status(404).json({ error: 'Post not found' });
         }

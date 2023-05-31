@@ -70,14 +70,14 @@ router.post('/register', async (req, res) => {
 //用戶登入
 router.post('/login', async (req,res)=>{
     const {email,password} =req.body;
-    console.log('@@@@@@@@@@',email,password);
+    // console.log('@@@@@@@@@@',email,password);
 
     try {
         
         //資料庫查找該用戶帳密 找到回傳到 user  //.exec方便檢查 
         const user = await User.findOne({email}).exec()
-        console.log("$$$$$",user)
-        console.log("$$$$$@@@",user._id)
+        // console.log("$$$$$",user)
+        // console.log("$$$$$@@@",user._id)
 
         //檢查登入的Email       
         if(!user){
@@ -90,14 +90,18 @@ router.post('/login', async (req,res)=>{
             return res.status(401).json({error:"密碼不正確"})
         }
         
-
+        // 為該成功登入之用戶產生 JWT
+        const token = await user.generateAuthToken();
+        
+        console.log('token :>> ', token);
             
-        // res.status(200).json({ token });
+        res.status(201).json({ msg:'登入成功' ,user,token });
         
     } catch (error) {
         res.status(500).json({ error: '登入失敗' });
     }
 })
+
 
 
 

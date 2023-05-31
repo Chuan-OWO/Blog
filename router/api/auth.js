@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-const jwt = require('jsonwebtoken')
 const User = require('../../models/usersModel')
 
 //bug user schema大小寫
@@ -57,7 +56,7 @@ router.post('/register', async (req, res) => {
         // const User = 
         await User.create({ email,username,password });
         
-        console.log("@@@@",User)
+        // console.log("@@@@",User)
         
         res.status(200).json({ message: '註冊成功' });
         
@@ -67,6 +66,38 @@ router.post('/register', async (req, res) => {
     }
   });
 
+
+//用戶登入
+router.post('/login', async (req,res)=>{
+    const {email,password} =req.body;
+    console.log('@@@@@@@@@@',email,password);
+
+    try {
+        
+        //資料庫查找該用戶帳密 找到回傳到 user  //.exec方便檢查 
+        const user = await User.findOne({email}).exec()
+        console.log("$$$$$",user)
+        console.log("$$$$$@@@",user._id)
+
+        //檢查登入的Email       
+        if(!user){
+            return res.status(404).json({error:'輸入的 Email 不存在'})
+        }
+         
+        //檢查登入的密碼
+        const isMatch = await user.comparePassword(password);
+        if(!isMatch){
+            return res.status(401).json({error:"密碼不正確"})
+        }
+        
+
+            
+        // res.status(200).json({ token });
+        
+    } catch (error) {
+        res.status(500).json({ error: '登入失敗' });
+    }
+})
 
 
 

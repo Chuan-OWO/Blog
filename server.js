@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 
 const authRoutes = require('./router/api/auth')
+const postRoutes = require('./router/api/post')
 
 const connection = require('./db/db')
 const cors = require('cors');
@@ -21,8 +22,10 @@ app.use((res,req,next)=>{
 })
 
 //routes
-//auth
+//Auth
 app.use('/api/auth',authRoutes)
+//Post 
+app.use('/api/post',postRoutes)
 
 
 //listen for requests
@@ -30,3 +33,4 @@ const port = process.env.PORT || 4000
 app.listen(process.env.PORT, ()=>{
     console.log(`listeneing on port ${port} `)
 })
+

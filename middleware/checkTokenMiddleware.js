@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const User = require('../../models/usersModel')
+const User = require('../models/usersModel')
 
 //jwt 身分驗證 
 module.exports = async  (req,res,next)=>{
@@ -24,6 +24,7 @@ module.exports = async  (req,res,next)=>{
         // 將 token 存到 req.token 上供後續使用
         req.token = token
         // 將用戶完整資料存到 req.user 上供後續使用
+        console.log('user :>> ', user);
         req.user = user
 
         next()

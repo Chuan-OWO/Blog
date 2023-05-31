@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 
 
@@ -34,11 +34,19 @@ const userSchema = new Schema({
 })
 
 //用 bcrypt 對 password 加密
+// 在 userSchema 上建立 Pre middleware 將密碼在儲存(save)前處理
 userSchema.pre('save', async function(next) {
   try {
+    //this 指向目前正被儲存的使用者 document
+    const user = this 
+
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
-    this.password = hashedPassword;
+
+    // 確認使用者的 password 欄位是有被變更：初次建立＆修改密碼都算
+    if (user.isModified('password')) {
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+
     next();
   } catch (error) {
     next(error);
@@ -54,6 +62,9 @@ userSchema.methods.comparePassword = async function(password) {
     throw new Error(error);
   }
 };
+
+
+
 
 
 module.exports = mongoose.model('user', userSchema);

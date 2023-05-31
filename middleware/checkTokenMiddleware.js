@@ -8,7 +8,7 @@ module.exports = async  (req,res,next)=>{
         // 從來自客戶端請求的 header 取得和擷取 JWT
         const token = req.header('Authorization').replace('Bearer ', '')
         if(!token){
-            return res.status(404).json({error:'輸入的 token 不存在'})
+            return res.status(400).json({error:'輸入的 token 不存在'})
         }
         // 驗證 Token
         const decoded = jwt.verify(token, process.env.JWTSECRET);
@@ -18,7 +18,7 @@ module.exports = async  (req,res,next)=>{
         //找尋符合用戶 id  的使用者資料
         const user = await User.findOne({ _id: decoded._id})
         if(!user){
-            return res.status(404).json({error:'輸入的 用戶 不存在'})
+            return res.status(400).json({error:'輸入的 用戶 不存在'})
         }
 
         // 將 token 存到 req.token 上供後續使用

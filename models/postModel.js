@@ -5,10 +5,14 @@ const Schema = mongoose.Schema
 const postSchema = new Schema({
     title: String,
     content: String,
-    // 與User 產生關聯
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    // 與user 產生關聯
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'user'
     }
   });
 

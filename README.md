@@ -11,11 +11,11 @@
 
 2. 文章發布：使用者可以撰寫並發布文章，包括標題、內容、發布日期等。
 
-- [ ] This is an incomplete item
+- [X] This is an incomplete item
 
 3. 文章編輯和刪除：使用者可以編輯和更新他們已經發布的文章，也可以刪除不需要的文章。
 
-- [ ] This is an incomplete item
+- [X] This is an incomplete item
 
 4. 文章分類和標籤：使用者可以將文章分類到不同的分類或附加標籤，以便讀者更容易找到特定的主題。
 

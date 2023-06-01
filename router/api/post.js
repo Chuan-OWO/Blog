@@ -8,7 +8,9 @@ const checkTokenMiddleware = require('../../middleware/checkTokenMiddleware')
 //CRUD Blog Post
 
 //搜尋全部文章 文章列表
-router.get('/getAll')
+router.get('/getAll', async (req,res)=>{
+  
+})
 
 //創建/新增文章
 router.post('/create',checkTokenMiddleware, async (req,res)=>{
@@ -48,6 +50,26 @@ router.get('/post/:id', async (req,res)=>{
 })
 
 //編輯更新單一文章
-router.patch('/post/:id')
+router.patch('/post/:id',checkTokenMiddleware, async (req,res)=>{
+  try {
+    const { title, content,userId } = req.body;
+    // const userId = req.user.id;
+
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { title, content, user: userId },
+      { new: true }
+    ).populate('user', 'username'); // Populate the 'user' field with the 'name' property
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    res.status(200).json(post);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
 
 module.exports = router;

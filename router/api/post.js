@@ -9,7 +9,15 @@ const checkTokenMiddleware = require('../../middleware/checkTokenMiddleware')
 
 //搜尋全部文章 文章列表
 router.get('/getAll', async (req,res)=>{
-  
+  try {
+  //最新的文章排列
+  const post =  Post.find().sort({time:-1}).exec()
+
+  res.status(201).json(post);
+
+  } catch (error) {
+  res.status(500).json({ error: error.message });
+  }
 })
 
 //創建/新增文章
@@ -37,19 +45,21 @@ router.get('/post/:id', async (req,res)=>{
     try {
         const post = await Post.findById(req.params.id)
         .populate('user', 'username')
-        console.log('post:>> ', post)
+
+        // console.log('post:>> ', post)
+
         if (!post) {
           return res.status(404).json({ error: 'Post not found' });
         }
 
-        res.json(post);
+        res.status(201).json(post);
         
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
 })
 
-//編輯更新單一文章
+//單一 編輯 更新 文章
 router.patch('/post/:id',checkTokenMiddleware, async (req,res)=>{
   try {
     const { title, content,userId } = req.body;
@@ -59,7 +69,7 @@ router.patch('/post/:id',checkTokenMiddleware, async (req,res)=>{
       req.params.id,
       { title, content, user: userId },
       { new: true }
-    ).populate('user', 'username'); // Populate the 'user' field with the 'name' property
+    ).populate('user', 'username'); 
 
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });

@@ -82,7 +82,7 @@ router.patch('/post/:id',checkTokenMiddleware, async (req,res)=>{
     ).populate('user', 'username')
 
     if (!post) {
-      return res.status(404).json({ error: '此文章 不存在' })
+      return res.status(200).json({ error: '此文章 不存在' })
     }
 
     console.log('post :>> ', post)

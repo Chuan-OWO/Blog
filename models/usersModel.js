@@ -73,14 +73,14 @@ userSchema.methods.generateAuthToken = async function() {
       { _id: user._id }, 
       process.env.JWTSECRET,
       {
-        expiresIn: 60 * 60 * 24 //一天
+        //一天
+        expiresIn: 60 * 60 * 24 
       }
     )
      // 回傳 JWT
     return token;
   } catch (error) {
     // 處理錯誤
-    console.error('生成令牌时出错：', error);
     throw error;
   }
 };

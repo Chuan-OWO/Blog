@@ -17,11 +17,12 @@ connection()
 app.use(cors());
 app.use(express.json())
 app.use((res,req,next)=>{
-    console.log(req.path,req.method)
+    console.log(res.path,req.method)
     next()
 })
 
-//routes
+//routes//
+
 //Auth
 app.use('/api/auth',authRoutes)
 //Post 
